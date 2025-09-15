@@ -15,14 +15,15 @@ public class CreateTweetCommandHandler {
         this.repository = repository;
     }
 
-    public void handle(CreateTweetCommand command) {
-        Tweet tweet = new Tweet(
+    public Tweet handle(CreateTweetCommand command) {
+        final Tweet tweet = new Tweet(
                 new TweetID(command.tweetID()),
                 new UserID(command.authorID()),
                 command.message(),
                 Instant.now()
         );
         repository.save(tweet);
+        return tweet;
     }
 
 }
