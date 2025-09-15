@@ -1,6 +1,6 @@
 package ar.com.lcapello.uala.challenge.tweet.application.command;
 
-import ar.com.lcapello.uala.challenge.common.domain.exception.InvalidUserIdException;
+import ar.com.lcapello.uala.challenge.user.domain.exception.InvalidUserIdException;
 import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetException;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetCommandRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetIdException;

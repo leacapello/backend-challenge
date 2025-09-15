@@ -1,6 +1,6 @@
 package ar.com.lcapello.uala.challenge.tweet.application.command;
 
-import ar.com.lcapello.uala.challenge.common.domain.vo.UserID;
+import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetCommandRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;

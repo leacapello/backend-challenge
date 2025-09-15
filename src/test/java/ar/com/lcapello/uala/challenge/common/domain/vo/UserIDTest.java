@@ -1,6 +1,7 @@
 package ar.com.lcapello.uala.challenge.common.domain.vo;
 
-import ar.com.lcapello.uala.challenge.common.domain.exception.InvalidUserIdException;
+import ar.com.lcapello.uala.challenge.user.domain.exception.InvalidUserIdException;
+import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

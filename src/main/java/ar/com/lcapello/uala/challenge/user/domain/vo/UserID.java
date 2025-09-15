@@ -1,6 +1,6 @@
-package ar.com.lcapello.uala.challenge.common.domain.vo;
+package ar.com.lcapello.uala.challenge.user.domain.vo;
 
-import ar.com.lcapello.uala.challenge.common.domain.exception.InvalidUserIdException;
+import ar.com.lcapello.uala.challenge.user.domain.exception.InvalidUserIdException;
 
 public record UserID(String value) {
     public UserID {

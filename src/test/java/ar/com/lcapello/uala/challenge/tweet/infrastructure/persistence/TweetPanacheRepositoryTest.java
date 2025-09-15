@@ -1,6 +1,6 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.persistence;
 
-import ar.com.lcapello.uala.challenge.common.domain.vo.UserID;
+import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 import io.quarkus.test.junit.QuarkusTest;

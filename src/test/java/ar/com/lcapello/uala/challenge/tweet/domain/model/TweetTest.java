@@ -1,6 +1,6 @@
 package ar.com.lcapello.uala.challenge.tweet.domain.model;
 
-import ar.com.lcapello.uala.challenge.common.domain.vo.UserID;
+import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetException;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 import org.junit.jupiter.api.Test;
