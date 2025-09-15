@@ -1,51 +1,65 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.rest;
 
-import ar.com.lcapello.uala.challenge.common.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.application.command.CreateTweetCommandHandler;
-import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
-import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.InjectMock;
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import java.time.Instant;
+import java.util.UUID;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTest
 public class TweetResourceTest {
 
-    @InjectMock
+    @Inject
     CreateTweetCommandHandler createTweetCommandHandler;
 
     @Test
     void shouldCreateTweetAndReturnResponse() {
-        // dado que el handler devuelve un Tweet creado
-        Tweet fakeTweet = new Tweet(
-                new TweetID("abc123"),
-                new UserID("user-999"),
-                "Hola mundo",
-                Instant.parse("2025-09-15T20:00:00Z")
-        );
+        final UUID tweetID = UUID.randomUUID();
 
-        when(createTweetCommandHandler.handle(any())).thenReturn(fakeTweet);
-
-        // cuando llamo al endpoint
         given()
-                .header("X-User-Id", "user-999")
-                .contentType(ContentType.JSON)
-                .body("{\"message\": \"Hola mundo\"}")
-                .when()
-                .post("/tweets/abc123")
-                .then()
-                .statusCode(201)
-                .contentType(ContentType.JSON)
-                .body("tweetID", equalTo("abc123"))
-                .body("authorID", equalTo("user-999"))
-                .body("message", equalTo("Hola mundo"))
-                .body("createdAt", equalTo("2025-09-15T20:00:00Z"))
-                .log().body();
+            .header("X-User-Id", "user-999")
+            .contentType(ContentType.JSON)
+            .body("{\"message\": \"Hola mundo\"}")
+        .when()
+            .post("/tweets/" + tweetID.toString())
+        .then()
+            .statusCode(201)
+            .contentType(ContentType.JSON)
+            .body("tweetID", equalTo(tweetID.toString()))
+            .body("authorID", equalTo("user-999"))
+            .body("message", equalTo("Hola mundo"))
+            .body("createdAt", notNullValue());
     }
+
+    @Test
+    void shouldReturn400WithErrorBodyWhenMessageIsBlank() {
+        given()
+            .header("X-User-Id", "user-123")
+            .contentType(ContentType.JSON)
+            .body("{\"message\": \"\"}")
+        .when()
+            .post("/tweets/abc123")
+        .then()
+            .statusCode(400)
+            .contentType(ContentType.JSON)
+            .body("error", equalTo("Invalid Tweet"))
+            .body("message", equalTo("Message cannot be null or blank"));
+    }
+
+    @Test
+    void shouldReturn400WhenTweetIdIsMissing() {
+        given()
+            .header("X-User-Id", "user-123")
+            .contentType(ContentType.JSON)
+            .body("{\"message\": \"hola mundo\"}")
+        .when()
+            .post("/tweets/ ")
+        .then()
+            .statusCode(404);
+    }
+
 }
