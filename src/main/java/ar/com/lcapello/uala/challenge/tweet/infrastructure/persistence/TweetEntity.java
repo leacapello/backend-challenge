@@ -3,10 +3,12 @@ package ar.com.lcapello.uala.challenge.tweet.infrastructure.persistence;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.Instant;
 
 @Entity
+@Table(name = "Tweets")
 public class TweetEntity {
 
     @Id

@@ -1,15 +1,14 @@
 package ar.com.lcapello.uala.challenge.follower.infrastructure.persistence;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
 @Entity
 @IdClass(FollowEntity.FollowId.class)
+@Table(name = "Followers")
 public class FollowEntity {
 
     @Id
