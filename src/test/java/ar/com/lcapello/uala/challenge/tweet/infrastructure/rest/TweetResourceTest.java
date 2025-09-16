@@ -62,4 +62,41 @@ public class TweetResourceTest {
             .statusCode(404);
     }
 
+    @Test
+    void shouldReturnTweetWhenExists() {
+        String tweetID = UUID.randomUUID().toString();
+
+        given()
+                .header("X-User-Id", "user-123")
+                .contentType(ContentType.JSON)
+                .body("{\"message\": \"Hola desde GET\"}")
+                .when()
+                .post("/tweets/" + tweetID)
+                .then()
+                .statusCode(201);
+
+        // luego hago el GET
+        given()
+            .header("X-User-Id", "user-123")
+        .when()
+            .get("/tweets/" + tweetID)
+        .then()
+            .statusCode(200)
+            .contentType(ContentType.JSON)
+            .body("tweetID", equalTo(tweetID))
+            .body("authorID", equalTo("user-123"))
+            .body("message", equalTo("Hola desde GET"))
+            .body("createdAt", notNullValue());
+    }
+
+    @Test
+    void shouldReturn404WhenTweetDoesNotExist() {
+        given()
+            .header("X-User-Id", "user-123")
+        .when()
+            .get("/tweets/" + UUID.randomUUID())
+        .then()
+            .statusCode(404);
+    }
+
 }

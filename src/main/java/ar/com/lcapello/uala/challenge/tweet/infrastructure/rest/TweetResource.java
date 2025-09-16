@@ -2,6 +2,8 @@ package ar.com.lcapello.uala.challenge.tweet.infrastructure.rest;
 
 import ar.com.lcapello.uala.challenge.tweet.application.command.CreateTweetCommand;
 import ar.com.lcapello.uala.challenge.tweet.application.command.CreateTweetCommandHandler;
+import ar.com.lcapello.uala.challenge.tweet.application.query.GetTweetByIdHandler;
+import ar.com.lcapello.uala.challenge.tweet.application.query.GetTweetByIdQuery;
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.infrastructure.rest.dto.CreateTweetRequest;
 import jakarta.inject.Inject;
@@ -12,6 +14,7 @@ import jakarta.ws.rs.core.Response;
 import ar.com.lcapello.uala.challenge.tweet.infrastructure.rest.dto.TweetResponse;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Path("/tweets")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -20,6 +23,8 @@ public class TweetResource {
 
     @Inject
     private CreateTweetCommandHandler createTweetCommandHandler;
+    @Inject
+    private GetTweetByIdHandler getTweetByIdHandler;
 
     @POST
     @Path("/{tweetID}")
@@ -44,6 +49,25 @@ public class TweetResource {
         return Response.created(URI.create("/tweets/" + tweetID))
                 .entity(tweetResponse)
                 .build();
+    }
+
+    @GET
+    @Path("/{tweetID}")
+    public Response create(@PathParam("tweetID") String tweetID,
+                           @HeaderParam("X-User-Id") String userId) {
+
+        final GetTweetByIdQuery query = new GetTweetByIdQuery(tweetID);
+
+        final Tweet tweet = getTweetByIdHandler.handle(query).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+        final TweetResponse tweetResponse = new TweetResponse(
+                tweet.getTweetID().value(),
+                tweet.getAuthorID().value(),
+                tweet.getMessage(),
+                tweet.getCreatedAt()
+        );
+
+        return Response.ok(tweetResponse).build();
     }
 
 }
