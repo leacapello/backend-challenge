@@ -10,7 +10,6 @@ public interface FollowQueryRepository {
     Optional<Follow> find(UserID followerID, UserID followedID);
     List<UserID> findFollowers(UserID userID);
     List<UserID> findFollowing(UserID userID);
-    boolean exists(UserID followerID, UserID followedID);
 }
 
 
