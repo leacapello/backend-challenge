@@ -4,5 +4,3 @@ public record RemoveFollowCommand(
         String followerID,
         String followedID
 ) {}
-
-
