@@ -1,48 +1,61 @@
 package ar.com.lcapello.uala.challenge.follower.application.query;
 
+import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
 import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.Instant;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class GetFollowingHandlerTest {
+public class GetFollowingHandlerTest {
 
-    @Test
-    void shouldReturnFollowingWhenFound() {
-        // given
-        FollowQueryRepository repository = mock(FollowQueryRepository.class);
-        GetFollowingHandler handler = new GetFollowingHandler(repository);
+    private FollowQueryRepository repository;
+    private GetFollowingHandler handler;
 
-        List<UserID> following = List.of(new UserID("u10"), new UserID("u20"));
-        when(repository.findFollowing(new UserID("me"))).thenReturn(following);
-
-        // when
-        List<UserID> result = handler.handle(new GetFollowingQuery("me"));
-
-        // then
-        assertEquals(2, result.size());
-        assertEquals("u10", result.get(0).value());
-        assertEquals("u20", result.get(1).value());
-        verify(repository, times(1)).findFollowing(new UserID("me"));
+    @BeforeEach
+    void setUp() {
+        repository = mock(FollowQueryRepository.class);
+        handler = new GetFollowingHandler(repository);
     }
 
     @Test
-    void shouldReturnEmptyWhenNoFollowing() {
-        // given
-        FollowQueryRepository repository = mock(FollowQueryRepository.class);
-        GetFollowingHandler handler = new GetFollowingHandler(repository);
+    void shouldReturnFollowFromRepository() {
+        // Arrange
+        String follower = "user123";
+        String followed = "user456";
+        GetFollowingQuery query = new GetFollowingQuery(follower, followed);
 
-        when(repository.findFollowing(new UserID("lonely"))).thenReturn(List.of());
+        Follow follow = new Follow(new UserID(follower), new UserID(followed), Instant.now());
+        when(repository.find(any(UserID.class), any(UserID.class)))
+                .thenReturn(Optional.of(follow));
 
-        // when
-        List<UserID> result = handler.handle(new GetFollowingQuery("lonely"));
+        // Act
+        Optional<Follow> result = handler.handle(query);
 
-        // then
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(follow, result.get());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenNotFound() {
+        // Arrange
+        String follower = "user123";
+        String followed = "user456";
+        GetFollowingQuery query = new GetFollowingQuery(follower, followed);
+
+        when(repository.find(any(UserID.class), any(UserID.class)))
+                .thenReturn(Optional.empty());
+
+        // Act
+        Optional<Follow> result = handler.handle(query);
+
+        // Assert
         assertTrue(result.isEmpty());
-        verify(repository, times(1)).findFollowing(new UserID("lonely"));
     }
 }

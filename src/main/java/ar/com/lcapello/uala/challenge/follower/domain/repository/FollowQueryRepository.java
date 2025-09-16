@@ -8,8 +8,5 @@ import java.util.Optional;
 
 public interface FollowQueryRepository {
     Optional<Follow> find(UserID followerID, UserID followedID);
-    List<UserID> findFollowers(UserID userID);
-    List<UserID> findFollowing(UserID userID);
+    List<Follow> findFollowers(UserID userID);
 }
-
-

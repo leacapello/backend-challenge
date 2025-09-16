@@ -1,48 +1,47 @@
 package ar.com.lcapello.uala.challenge.follower.application.query;
 
+import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
 import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class GetFollowersHandlerTest {
+public class GetFollowersHandlerTest {
 
-    @Test
-    void shouldReturnFollowersWhenFound() {
-        // given
-        FollowQueryRepository repository = mock(FollowQueryRepository.class);
-        GetFollowersHandler handler = new GetFollowersHandler(repository);
+    private FollowQueryRepository repository;
+    private GetFollowersHandler handler;
 
-        List<UserID> followers = List.of(new UserID("u1"), new UserID("u2"));
-        when(repository.findFollowers(new UserID("target"))).thenReturn(followers);
-
-        // when
-        List<UserID> result = handler.handle(new GetFollowersQuery("target"));
-
-        // then
-        assertEquals(2, result.size());
-        assertEquals("u1", result.get(0).value());
-        assertEquals("u2", result.get(1).value());
-        verify(repository, times(1)).findFollowers(new UserID("target"));
+    @BeforeEach
+    void setUp() {
+        repository = mock(FollowQueryRepository.class);
+        handler = new GetFollowersHandler(repository);
     }
 
     @Test
-    void shouldReturnEmptyWhenNoFollowers() {
-        // given
-        FollowQueryRepository repository = mock(FollowQueryRepository.class);
-        GetFollowersHandler handler = new GetFollowersHandler(repository);
+    void shouldReturnFollowersFromRepository() {
+        // Arrange
+        String targetUserId = "user123";
+        GetFollowersQuery query = new GetFollowersQuery(targetUserId);
 
-        when(repository.findFollowers(new UserID("nobody"))).thenReturn(List.of());
+        Follow follow1 = new Follow(new UserID("f1"), new UserID(targetUserId), Instant.now());
+        Follow follow2 = new Follow(new UserID("f2"), new UserID(targetUserId), Instant.now());
 
-        // when
-        List<UserID> result = handler.handle(new GetFollowersQuery("nobody"));
+        when(repository.findFollowers(any(UserID.class)))
+                .thenReturn(List.of(follow1, follow2));
 
-        // then
-        assertTrue(result.isEmpty());
-        verify(repository, times(1)).findFollowers(new UserID("nobody"));
+        // Act
+        List<Follow> result = handler.handle(query);
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals(List.of(follow1, follow2), result);
+        verify(repository, times(1)).findFollowers(new UserID(targetUserId));
     }
 }
