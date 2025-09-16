@@ -15,6 +15,6 @@ public class GetFollowersHandler {
     }
 
     public List<Follow> handle(GetFollowersQuery query) {
-        return repository.findFollowers(new UserID(query.userID()));
+        return repository.findFollowers(new UserID(query.userId()));
     }
 }

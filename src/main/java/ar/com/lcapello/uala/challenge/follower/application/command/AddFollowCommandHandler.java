@@ -16,8 +16,8 @@ public class AddFollowCommandHandler {
 
     public Follow handle(AddFollowCommand command) {
         final Follow follow = new Follow(
-                new UserID(command.followerID()),
-                new UserID(command.followedID()),
+                new UserID(command.followerId()),
+                new UserID(command.followedId()),
                 Instant.now()
         );
         repository.save(follow);

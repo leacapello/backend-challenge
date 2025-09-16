@@ -10,9 +10,6 @@ import ar.com.lcapello.uala.challenge.follower.application.query.GetFollowingHan
 import ar.com.lcapello.uala.challenge.follower.application.query.GetFollowingQuery;
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.infrastructure.rest.dto.FollowerResponse;
-import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
-import ar.com.lcapello.uala.challenge.tweet.infrastructure.rest.dto.TweetResponse;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -23,8 +20,6 @@ import java.net.URI;
 import java.util.List;
 
 @Path("/followers")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class FollowerResource {
 
     @Inject
@@ -42,6 +37,7 @@ public class FollowerResource {
     @POST
     @Path("/{followedID}")
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public Response create(@HeaderParam("X-User-Id") String followerID,
                             @PathParam("followedID") String followedID) {
         final Follow follow = addFollowCommandHandler.handle(new AddFollowCommand(followerID, followedID));
@@ -68,14 +64,23 @@ public class FollowerResource {
 
     @GET
     @Path("/{followedID}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getFollowed(@HeaderParam("X-User-Id") String followerID,
                                 @PathParam("followedID") String followedID) {
         final Follow follow = getFollowingHandler.handle(new GetFollowingQuery(followerID, followedID))
                 .orElseThrow(() -> new NotFoundException("Followed not found"));
-        return Response.ok(follow).build();
+
+        final FollowerResponse followerResponse = new FollowerResponse(
+                follow.getFollowerID().value(),
+                follow.getFollowedID().value(),
+                follow.getCreatedAt()
+        );
+
+        return Response.ok(followerResponse).build();
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getFollowers(@HeaderParam("X-User-Id") String followerID) {
         final List<Follow> followers = getFollowersHandler.handle(new GetFollowersQuery(followerID));
         final List<FollowerResponse> result = followers.stream()

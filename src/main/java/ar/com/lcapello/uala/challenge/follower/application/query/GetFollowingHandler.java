@@ -16,7 +16,7 @@ public class GetFollowingHandler {
     }
 
     public Optional<Follow> handle(GetFollowingQuery query) {
-        return repository.find(new UserID(query.followerID()), new UserID(query.followerID()));
+        return repository.find(new UserID(query.followerId()), new UserID(query.followedId()));
     }
 
 }

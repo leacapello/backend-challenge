@@ -16,8 +16,8 @@ public class RemoveFollowCommandHandler {
 
     public void handle(RemoveFollowCommand command) {
         final Follow follow = new Follow(
-                new UserID(command.followerID()),
-                new UserID(command.followedID()),
+                new UserID(command.followerId()),
+                new UserID(command.followedId()),
                 Instant.now()
         );
         repository.delete(follow);
