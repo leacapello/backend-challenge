@@ -8,7 +8,6 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,22 +37,14 @@ public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEnti
     }
 
     @Override
-    public List<UserID> findFollowers(UserID userID) {
-        return find("SELECT f.followerID FROM FollowEntity f WHERE f.followedID = ?1", userID.value())
-                .project(String.class)
-                .list()
+    public List<Follow> findFollowers(UserID userID) {
+        return find("followedID = ?1", userID.value())
                 .stream()
-                .map(UserID::new)
-                .toList();
-    }
-
-    @Override
-    public List<UserID> findFollowing(UserID userID) {
-        return find("SELECT f.followedID FROM FollowEntity f WHERE f.followerID = ?1", userID.value())
-                .project(String.class)
-                .list()
-                .stream()
-                .map(UserID::new)
+                .map(entity -> new Follow(
+                        new UserID(entity.getFollowerID()),
+                        new UserID(entity.getFollowedID()),
+                        entity.getCreatedAt()
+                ))
                 .toList();
     }
 

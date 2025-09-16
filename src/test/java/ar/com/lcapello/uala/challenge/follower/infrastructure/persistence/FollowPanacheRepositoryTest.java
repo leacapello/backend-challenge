@@ -5,11 +5,9 @@ import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -19,110 +17,82 @@ public class FollowPanacheRepositoryTest {
     FollowPanacheRepository repository;
 
     @Test
-    public void testSaveAndFind() {
+    public void testSaveFollow() {
         // given
-        String suffix = String.valueOf(System.currentTimeMillis());
         Follow follow = new Follow(
-                new UserID("f1-" + suffix),
-                new UserID("f2-" + suffix),
+                new UserID("f1"),
+                new UserID("f2"),
                 Instant.now()
         );
 
         // when
         repository.save(follow);
 
-        // then - find pair
-        Optional<Follow> found = repository.find(new UserID("f1-" + suffix), new UserID("f2-" + suffix));
-        assertTrue(found.isPresent());
-        assertEquals("f1-" + suffix, found.get().getFollowerID().value());
-        assertEquals("f2-" + suffix, found.get().getFollowedID().value());
-        assertNotNull(found.get().getCreatedAt());
-
-        // then - findFollowers
-        List<UserID> followers = repository.findFollowers(new UserID("f2-" + suffix));
-        assertTrue(followers.stream().map(UserID::value).anyMatch(id -> id.equals("f1-" + suffix)));
-
-        // then - findFollowing
-        List<UserID> following = repository.findFollowing(new UserID("f1-" + suffix));
-        assertTrue(following.stream().map(UserID::value).anyMatch(id -> id.equals("f2-" + suffix)));
+        // then
+        FollowEntity.FollowId id = new FollowEntity.FollowId("f1", "f2");
+        FollowEntity entity = repository.findById(id);
+        assertNotNull(entity);
+        assertEquals("f1", entity.getFollowerID());
+        assertEquals("f2", entity.getFollowedID());
+        assertNotNull(entity.getCreatedAt());
     }
 
     @Test
-    public void testDelete() {
+    public void testFindWhenExists() {
         // given
-        String suffix = String.valueOf(System.currentTimeMillis());
         Follow follow = new Follow(
-                new UserID("a1-" + suffix),
-                new UserID("a2-" + suffix),
+                new UserID("a1"),
+                new UserID("a2"),
                 Instant.now()
         );
+        repository.save(follow);
+
+        // when
+        Optional<Follow> result = repository.find(new UserID("a1"), new UserID("a2"));
+
+        // then
+        assertTrue(result.isPresent());
+        Follow found = result.get();
+        assertEquals("a1", found.getFollowerID().value());
+        assertEquals("a2", found.getFollowedID().value());
+        assertNotNull(found.getCreatedAt());
+    }
+
+    @Test
+    public void testFindWhenNotExists() {
+        // when
+        Optional<Follow> result = repository.find(new UserID("nope"), new UserID("missing"));
+
+        // then
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testFindFollowers() {
+        // given
+        repository.save(new Follow(new UserID("x1"), new UserID("target"), Instant.now()));
+        repository.save(new Follow(new UserID("x2"), new UserID("target"), Instant.now()));
+        repository.save(new Follow(new UserID("x3"), new UserID("other"), Instant.now()));
+
+        // when
+        List<Follow> followers = repository.findFollowers(new UserID("target"));
+
+        // then
+        assertEquals(2, followers.size());
+        assertTrue(followers.stream().allMatch(f -> f.getFollowedID().value().equals("target")));
+    }
+
+    @Test
+    public void testDeleteFollow() {
+        // given
+        Follow follow = new Follow(new UserID("d1"), new UserID("d2"), Instant.now());
         repository.save(follow);
 
         // when
         repository.delete(follow);
 
         // then
-        Optional<Follow> found = repository.find(new UserID("a1-" + suffix), new UserID("a2-" + suffix));
-        assertTrue(found.isEmpty());
-    }
-
-    @Test
-    public void testFindFollowersReturnsMultiple() {
-        // given: u2 tiene dos seguidores u1 y u3
-        String suffix = String.valueOf(System.currentTimeMillis());
-        String u1 = "u1-" + suffix;
-        String u2 = "u2-" + suffix;
-        String u3 = "u3-" + suffix;
-        repository.save(new Follow(new UserID(u1), new UserID(u2), Instant.now()));
-        repository.save(new Follow(new UserID(u3), new UserID(u2), Instant.now()));
-
-        // when
-        List<UserID> followers = repository.findFollowers(new UserID(u2));
-
-        // then
-        List<String> values = followers.stream().map(UserID::value).toList();
-        assertTrue(values.contains(u1));
-        assertTrue(values.contains(u3));
-        assertEquals(2, values.size());
-    }
-
-    @Test
-    public void testFindFollowingReturnsMultiple() {
-        // given: u1 sigue a u2 y u3
-        String suffix = String.valueOf(System.currentTimeMillis());
-        String u1 = "u1-" + suffix;
-        String u2 = "u2-" + suffix;
-        String u3 = "u3-" + suffix;
-        repository.save(new Follow(new UserID(u1), new UserID(u2), Instant.now()));
-        repository.save(new Follow(new UserID(u1), new UserID(u3), Instant.now()));
-
-        // when
-        List<UserID> following = repository.findFollowing(new UserID(u1));
-
-        // then
-        List<String> values = following.stream().map(UserID::value).toList();
-        assertTrue(values.contains(u2));
-        assertTrue(values.contains(u3));
-        assertEquals(2, values.size());
-    }
-
-    @Test
-    public void testFindFollowersReturnsEmptyList() {
-        // when
-        String suffix = String.valueOf(System.currentTimeMillis());
-        List<UserID> followers = repository.findFollowers(new UserID("nobody-" + suffix));
-        // then
-        assertNotNull(followers);
-        assertTrue(followers.isEmpty());
-    }
-
-    @Test
-    public void testFindFollowingReturnsEmptyList() {
-        // when
-        String suffix = String.valueOf(System.currentTimeMillis());
-        List<UserID> following = repository.findFollowing(new UserID("lonely-" + suffix));
-        // then
-        assertNotNull(following);
-        assertTrue(following.isEmpty());
+        Optional<Follow> result = repository.find(new UserID("d1"), new UserID("d2"));
+        assertTrue(result.isEmpty());
     }
 }
