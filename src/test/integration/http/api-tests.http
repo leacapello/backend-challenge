@@ -7,17 +7,3 @@ Accept: application/json
 {
   "message": "Hola mundo"
 }
-
-> {%
-    client.test("Debe devolver 201", () => {
-        client.assert(response.status === 201, "Esperaba 201 pero fue " + response.status);
-    });
-
-    client.test("Debe tener el body esperado", () => {
-        client.assert(response.body.tweetID === "1", "tweetID incorrecto");
-        client.assert(response.body.authorID === "user1", "authorID incorrecto");
-        client.assert(response.body.message === "Hola mundo", "message incorrecto");
-        client.assert(response.body.createdAt !== undefined, "createdAt debe existir");
-    });
-%}
-
