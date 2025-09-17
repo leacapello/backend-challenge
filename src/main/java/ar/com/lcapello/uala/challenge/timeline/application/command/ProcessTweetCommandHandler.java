@@ -22,14 +22,6 @@ public class ProcessTweetCommandHandler {
 
         final List<Timeline> entries = new ArrayList<>(followerIds.size());
 
-//        entries.add(new Timeline(
-//                event.tweetId(),
-//                event.authorId(),
-//                event.message(),
-//                event.createdAt(),
-//                event.authorId()
-//        ));
-
         for (final String followerId : followerIds) {
             entries.add(new Timeline(
                     event.tweetId(),

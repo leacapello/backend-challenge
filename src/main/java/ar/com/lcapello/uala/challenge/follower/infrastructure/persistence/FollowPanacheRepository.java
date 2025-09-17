@@ -3,6 +3,7 @@ package ar.com.lcapello.uala.challenge.follower.infrastructure.persistence;
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowCommandRepository;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
+import ar.com.lcapello.uala.challenge.timeline.domain.repository.FollowerReader;
 import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
-public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEntity, FollowEntity.FollowId>, FollowCommandRepository, FollowQueryRepository {
+public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEntity, FollowEntity.FollowId>, FollowCommandRepository, FollowQueryRepository, FollowerReader {
 
     @Override
     @Transactional
@@ -45,6 +46,14 @@ public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEnti
                         new UserID(entity.getFollowedID()),
                         entity.getCreatedAt()
                 ))
+                .toList();
+    }
+
+    @Override
+    public List<String> findFollowersOf(String authorId) {
+        return find("followedID = ?1", authorId)
+                .stream()
+                .map(FollowEntity::getFollowerID)
                 .toList();
     }
 
