@@ -1,4 +1,4 @@
-package ar.com.lcapello.uala.challenge.timeline.infrastructure.rest.persistence;
+package ar.com.lcapello.uala.challenge.timeline.infrastructure.persistence;
 
 import jakarta.persistence.*;
 

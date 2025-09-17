@@ -1,4 +1,4 @@
-package ar.com.lcapello.uala.challenge.timeline.infrastructure.rest.config;
+package ar.com.lcapello.uala.challenge.timeline.infrastructure.config;
 
 import ar.com.lcapello.uala.challenge.timeline.application.query.GetTimelineByFollowerHandler;
 import ar.com.lcapello.uala.challenge.timeline.domain.repository.TimelineQueryRepository;

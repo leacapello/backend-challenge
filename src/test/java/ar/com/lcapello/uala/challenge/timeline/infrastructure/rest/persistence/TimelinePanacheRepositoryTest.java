@@ -1,6 +1,8 @@
 package ar.com.lcapello.uala.challenge.timeline.infrastructure.rest.persistence;
 
 import ar.com.lcapello.uala.challenge.timeline.domain.model.Timeline;
+import ar.com.lcapello.uala.challenge.timeline.infrastructure.persistence.TimelineEntity;
+import ar.com.lcapello.uala.challenge.timeline.infrastructure.persistence.TimelinePanacheRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -57,5 +59,25 @@ public class TimelinePanacheRepositoryTest {
     public void testFindByFollowerReturnsEmptyWhenNoMatches() {
         List<Timeline> result = repository.findByFollower("no-existe", 0, 10);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testSaveAllPersistsTimelines() {
+        String follower = "user-batch";
+
+        List<Timeline> timelines = List.of(
+                new Timeline("bt1", "author-1", follower, "msg1", Instant.parse("2023-01-02T10:00:00Z")),
+                new Timeline("bt2", "author-2", follower, "msg2", Instant.parse("2023-01-02T11:00:00Z")),
+                new Timeline("bt3", "author-3", follower, "msg3", Instant.parse("2023-01-02T12:00:00Z"))
+        );
+
+        repository.saveAll(timelines);
+
+        List<Timeline> result = repository.findByFollower(follower, 0, 10);
+
+        assertEquals(3, result.size());
+        assertTrue(result.stream().anyMatch(t -> t.getTweetId().equals("bt1")));
+        assertTrue(result.stream().anyMatch(t -> t.getTweetId().equals("bt2")));
+        assertTrue(result.stream().anyMatch(t -> t.getTweetId().equals("bt3")));
     }
 }
