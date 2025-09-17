@@ -1,9 +1,9 @@
 package ar.com.lcapello.uala.challenge.follower.infrastructure.rest;
 
-import ar.com.lcapello.uala.challenge.follower.application.command.AddFollowCommandHandler;
-import ar.com.lcapello.uala.challenge.follower.application.command.RemoveFollowCommandHandler;
-import ar.com.lcapello.uala.challenge.follower.application.query.GetFollowersHandler;
-import ar.com.lcapello.uala.challenge.follower.application.query.GetFollowingHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.application.command.RemoveFollowCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingHandler;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;

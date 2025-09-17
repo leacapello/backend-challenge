@@ -1,7 +1,9 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.persistence;
 
-import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
-import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.model.Tweet;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.vo.TweetID;
+import ar.com.lcapello.uala.challenge.slices.tweet.infrastructure.persistence.TweetEntity;
+import ar.com.lcapello.uala.challenge.slices.tweet.infrastructure.persistence.TweetPanacheRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;

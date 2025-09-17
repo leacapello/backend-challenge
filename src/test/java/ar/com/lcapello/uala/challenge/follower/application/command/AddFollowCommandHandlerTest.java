@@ -1,8 +1,10 @@
 package ar.com.lcapello.uala.challenge.follower.application.command;
 
-import ar.com.lcapello.uala.challenge.follower.domain.exception.InvalidFollowException;
-import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
-import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowCommandRepository;
+import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommand;
+import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.exception.InvalidFollowException;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.repository.FollowCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

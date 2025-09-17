@@ -1,6 +1,6 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.rest;
 
-import ar.com.lcapello.uala.challenge.tweet.application.command.CreateTweetCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.tweet.application.command.CreateTweetCommandHandler;
 import ar.com.lcapello.uala.challenge.tweet.infrastructure.lifecycle.KafkaTestLifecycleManagerOut;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;

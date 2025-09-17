@@ -1,9 +1,11 @@
 package ar.com.lcapello.uala.challenge.timeline.application.query;
 
-import ar.com.lcapello.uala.challenge.timeline.application.config.TimelineQueryConfig;
-import ar.com.lcapello.uala.challenge.timeline.application.exception.InvalidPageSizeException;
-import ar.com.lcapello.uala.challenge.timeline.domain.model.Timeline;
-import ar.com.lcapello.uala.challenge.timeline.domain.repository.TimelineQueryRepository;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.config.TimelineQueryConfig;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.exception.InvalidPageSizeException;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerHandler;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerQuery;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.TimelineQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;

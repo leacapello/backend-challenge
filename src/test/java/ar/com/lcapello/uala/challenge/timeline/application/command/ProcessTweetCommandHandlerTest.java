@@ -1,8 +1,10 @@
 package ar.com.lcapello.uala.challenge.timeline.application.command;
 
-import ar.com.lcapello.uala.challenge.timeline.domain.model.Timeline;
-import ar.com.lcapello.uala.challenge.timeline.domain.repository.FollowerReader;
-import ar.com.lcapello.uala.challenge.timeline.domain.repository.TimelineCommandRepository;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.command.CreateTweetEvent;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.command.ProcessTweetCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowerReader;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.TimelineCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

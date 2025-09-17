@@ -1,7 +1,9 @@
 package ar.com.lcapello.uala.challenge.follower.application.query;
 
-import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
-import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
+import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersHandler;
+import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersQuery;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.repository.FollowQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

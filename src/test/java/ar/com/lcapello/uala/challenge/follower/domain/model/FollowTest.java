@@ -1,7 +1,8 @@
 package ar.com.lcapello.uala.challenge.follower.domain.model;
 
 import static org.junit.jupiter.api.Assertions.*;
-import ar.com.lcapello.uala.challenge.follower.domain.exception.InvalidFollowException;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.exception.InvalidFollowException;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
 

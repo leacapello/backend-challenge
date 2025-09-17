@@ -1,6 +1,8 @@
 package ar.com.lcapello.uala.challenge.follower.infrastructure.persistence;
 
-import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
+import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
+import ar.com.lcapello.uala.challenge.slices.follower.infrastructure.persistence.FollowEntity;
+import ar.com.lcapello.uala.challenge.slices.follower.infrastructure.persistence.FollowPanacheRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package ar.com.lcapello.uala.challenge.timeline.infrastructure.rest.persistence;
 
-import ar.com.lcapello.uala.challenge.timeline.domain.model.Timeline;
-import ar.com.lcapello.uala.challenge.timeline.infrastructure.persistence.TimelineEntity;
-import ar.com.lcapello.uala.challenge.timeline.infrastructure.persistence.TimelinePanacheRepository;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
+import ar.com.lcapello.uala.challenge.slices.timeline.infrastructure.persistence.TimelineEntity;
+import ar.com.lcapello.uala.challenge.slices.timeline.infrastructure.persistence.TimelinePanacheRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

@@ -1,6 +1,7 @@
 package ar.com.lcapello.uala.challenge.timeline.domain.model;
 
-import ar.com.lcapello.uala.challenge.timeline.domain.exception.InvalidTimelineException;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.exception.InvalidTimelineException;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;

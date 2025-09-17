@@ -1,10 +1,12 @@
 package ar.com.lcapello.uala.challenge.tweet.application.command;
 
-import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetException;
-import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetIdException;
-import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
-import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetCommandRepository;
-import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetEventPublisher;
+import ar.com.lcapello.uala.challenge.slices.tweet.application.command.CreateTweetCommand;
+import ar.com.lcapello.uala.challenge.slices.tweet.application.command.CreateTweetCommandHandler;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.exception.InvalidTweetException;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.exception.InvalidTweetIdException;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.model.Tweet;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.repository.TweetCommandRepository;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.repository.TweetEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

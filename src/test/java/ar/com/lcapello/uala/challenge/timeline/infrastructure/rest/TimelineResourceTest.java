@@ -1,8 +1,8 @@
 package ar.com.lcapello.uala.challenge.timeline.infrastructure.rest;
 
-import ar.com.lcapello.uala.challenge.timeline.application.query.GetTimelineByFollowerHandler;
-import ar.com.lcapello.uala.challenge.timeline.application.query.GetTimelineByFollowerQuery;
-import ar.com.lcapello.uala.challenge.timeline.domain.model.Timeline;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerHandler;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerQuery;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;

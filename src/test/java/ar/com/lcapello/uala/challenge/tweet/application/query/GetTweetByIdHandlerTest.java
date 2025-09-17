@@ -1,8 +1,10 @@
 package ar.com.lcapello.uala.challenge.tweet.application.query;
 
-import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
-import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetQueryRepository;
-import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
+import ar.com.lcapello.uala.challenge.slices.tweet.application.query.GetTweetByIdHandler;
+import ar.com.lcapello.uala.challenge.slices.tweet.application.query.GetTweetByIdQuery;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.model.Tweet;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.repository.TweetQueryRepository;
+import ar.com.lcapello.uala.challenge.slices.tweet.domain.vo.TweetID;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.Optional;
