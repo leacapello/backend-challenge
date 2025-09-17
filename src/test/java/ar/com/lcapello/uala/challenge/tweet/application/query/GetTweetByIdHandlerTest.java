@@ -3,7 +3,6 @@ package ar.com.lcapello.uala.challenge.tweet.application.query;
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetQueryRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.Optional;
@@ -20,7 +19,7 @@ class GetTweetByIdHandlerTest {
 
         Tweet tweet = new Tweet(
                 new TweetID("abc123"),
-                new UserID("user-123"),
+                "user-123",
                 "Hola mundo",
                 Instant.parse("2025-09-15T20:00:00Z")
         );

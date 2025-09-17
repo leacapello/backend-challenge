@@ -1,6 +1,5 @@
 package ar.com.lcapello.uala.challenge.tweet.domain.model;
 
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetException;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ public class TweetTest {
     @Test
     void shouldCreateTweetWhenValuesAreValid() {
         TweetID tweetID = new TweetID("t1");
-        UserID userID = new UserID("u1");
+        String userID = "u1";
         String message = "Mensaje válido";
         Instant createdAt = Instant.now();
 
@@ -29,7 +28,7 @@ public class TweetTest {
     @Test
     void shouldThrowExceptionWhenMessageIsNull() {
         TweetID tweetID = new TweetID("t1");
-        UserID userID = new UserID("u1");
+        String userID = "u1";
         Instant createdAt = Instant.now();
 
         InvalidTweetException ex = assertThrows(
@@ -42,7 +41,7 @@ public class TweetTest {
     @Test
     void shouldThrowExceptionWhenMessageIsBlank() {
         TweetID tweetID = new TweetID("t1");
-        UserID userID = new UserID("u1");
+        String userID = "u1";
         Instant createdAt = Instant.now();
 
         InvalidTweetException ex = assertThrows(
@@ -55,7 +54,7 @@ public class TweetTest {
     @Test
     void shouldThrowExceptionWhenMessageExceedsMaxLength() {
         TweetID tweetID = new TweetID("t1");
-        UserID userID = new UserID("u1");
+        String userID = "u1";
         String longMessage = "a".repeat(281);
         Instant createdAt = Instant.now();
 
@@ -69,7 +68,7 @@ public class TweetTest {
     @Test
     void shouldThrowExceptionWhenCreatedAtIsNull() {
         TweetID tweetID = new TweetID("t1");
-        UserID userID = new UserID("u1");
+        String userID = "u1";
         String message = "Mensaje válido";
 
         InvalidTweetException ex = assertThrows(

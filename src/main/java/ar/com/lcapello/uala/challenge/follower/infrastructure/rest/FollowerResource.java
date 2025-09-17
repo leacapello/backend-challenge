@@ -43,8 +43,8 @@ public class FollowerResource {
         final Follow follow = addFollowCommandHandler.handle(new AddFollowCommand(followerID, followedID));
 
         final FollowerResponse followerResponse = new FollowerResponse(
-            follow.getFollowerID().value(),
-            follow.getFollowedID().value(),
+            follow.getFollowerID(),
+            follow.getFollowedID(),
             follow.getCreatedAt()
         );
 
@@ -71,8 +71,8 @@ public class FollowerResource {
                 .orElseThrow(() -> new NotFoundException("Followed not found"));
 
         final FollowerResponse followerResponse = new FollowerResponse(
-                follow.getFollowerID().value(),
-                follow.getFollowedID().value(),
+                follow.getFollowerID(),
+                follow.getFollowedID(),
                 follow.getCreatedAt()
         );
 
@@ -86,8 +86,8 @@ public class FollowerResource {
         final List<FollowerResponse> result = followers.stream()
                 .map(response ->
                         new FollowerResponse(
-                                response.getFollowerID().value(),
-                                response.getFollowedID().value(),
+                                response.getFollowerID(),
+                                response.getFollowedID(),
                                 response.getCreatedAt()
                         )
                 ).toList();

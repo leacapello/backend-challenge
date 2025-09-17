@@ -20,7 +20,7 @@ public class TweetResourceTest {
     CreateTweetCommandHandler createTweetCommandHandler;
 
     @Test
-    void shouldGetTweetAndReturnResponse() {
+    void shouldCreateTweetAndReturnResponse() {
         final UUID tweetID = UUID.randomUUID();
 
         given()

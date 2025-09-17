@@ -5,10 +5,18 @@ import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetIdExcep
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import jakarta.inject.Inject;
+
+import java.net.http.HttpRequest;
 import java.util.Map;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.server.spi.ServerRequestContext;
+
 
 @Provider
 public class TweetExceptionMapper {
+
+    private static final Logger LOG = Logger.getLogger(TweetExceptionMapper.class);
 
     @ServerExceptionMapper
     public Response handleInvalidTweet(InvalidTweetException ex) {

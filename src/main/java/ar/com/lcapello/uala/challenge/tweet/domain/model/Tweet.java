@@ -1,6 +1,5 @@
 package ar.com.lcapello.uala.challenge.tweet.domain.model;
 
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetException;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 
@@ -12,11 +11,11 @@ public class Tweet {
     private static final int MAX_LENGTH = 280;
 
     private TweetID tweetID;
-    private UserID authorID;
+    private String authorID;
     private String message;
     private Instant createdAt;
 
-    public Tweet(TweetID tweetID, UserID authorID, String message, Instant createdAt) {
+    public Tweet(TweetID tweetID, String authorID, String message, Instant createdAt) {
         if (message == null || message.isBlank()) {
             throw new InvalidTweetException("Message cannot be null or blank");
         }
@@ -37,7 +36,7 @@ public class Tweet {
         return tweetID;
     }
 
-    public UserID getAuthorID() {
+    public String getAuthorID() {
         return authorID;
     }
 

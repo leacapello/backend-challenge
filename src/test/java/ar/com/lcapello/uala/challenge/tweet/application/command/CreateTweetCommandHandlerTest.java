@@ -5,7 +5,6 @@ import ar.com.lcapello.uala.challenge.tweet.domain.exception.InvalidTweetIdExcep
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetCommandRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetEventPublisher;
-import ar.com.lcapello.uala.challenge.user.domain.exception.InvalidUserIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +40,7 @@ public class CreateTweetCommandHandlerTest {
 
         Tweet saved = captor.getValue();
         assertEquals("123e4567-e89b-12d3-a456-426614174000", saved.getTweetID().value());
-        assertEquals("user-1", saved.getAuthorID().value());
+        assertEquals("user-1", saved.getAuthorID());
         assertEquals("Hello world", saved.getMessage());
         assertNotNull(saved.getCreatedAt());
     }
@@ -55,19 +54,6 @@ public class CreateTweetCommandHandlerTest {
         );
 
         assertThrows(InvalidTweetIdException.class, () -> handler.handle(command));
-        verify(repository, never()).save(any());
-        verify(publisher, never()).publish(any());
-    }
-
-    @Test
-    void handle_shouldThrowIfUserIdInvalid() {
-        CreateTweetCommand command = new CreateTweetCommand(
-                "123e4567-e89b-12d3-a456-426614174000",
-                "",  // inválido
-                "Hello world"
-        );
-
-        assertThrows(InvalidUserIdException.class, () -> handler.handle(command));
         verify(repository, never()).save(any());
         verify(publisher, never()).publish(any());
     }

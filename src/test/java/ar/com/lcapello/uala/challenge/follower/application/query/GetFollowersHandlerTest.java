@@ -2,7 +2,6 @@ package ar.com.lcapello.uala.challenge.follower.application.query;
 
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,10 +29,10 @@ public class GetFollowersHandlerTest {
         String targetUserId = "user123";
         GetFollowersQuery query = new GetFollowersQuery(targetUserId);
 
-        Follow follow1 = new Follow(new UserID("f1"), new UserID(targetUserId), Instant.now());
-        Follow follow2 = new Follow(new UserID("f2"), new UserID(targetUserId), Instant.now());
+        Follow follow1 = new Follow("f1", targetUserId, Instant.now());
+        Follow follow2 = new Follow("f2", targetUserId, Instant.now());
 
-        when(repository.findFollowers(any(UserID.class)))
+        when(repository.findFollowers(any(String.class)))
                 .thenReturn(List.of(follow1, follow2));
 
         // Act
@@ -42,6 +41,6 @@ public class GetFollowersHandlerTest {
         // Assert
         assertEquals(2, result.size());
         assertEquals(List.of(follow1, follow2), result);
-        verify(repository, times(1)).findFollowers(new UserID(targetUserId));
+        verify(repository, times(1)).findFollowers(targetUserId);
     }
 }

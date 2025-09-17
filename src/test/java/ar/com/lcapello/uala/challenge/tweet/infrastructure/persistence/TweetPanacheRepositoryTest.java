@@ -1,6 +1,5 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.persistence;
 
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,7 +22,7 @@ public class TweetPanacheRepositoryTest {
         // given
         Tweet tweet = new Tweet(
                 new TweetID("abc123"),
-                new UserID("user-id"),
+                "user-id",
                 "Hola mundo",
                 Instant.now()
         );
@@ -45,7 +44,7 @@ public class TweetPanacheRepositoryTest {
         // given
         Tweet tweet = new Tweet(
                 new TweetID("xyz999"),
-                new UserID("user-123"),
+                "user-123",
                 "Mensaje de prueba",
                 Instant.now()
         );
@@ -58,7 +57,7 @@ public class TweetPanacheRepositoryTest {
         assertTrue(result.isPresent());
         Tweet found = result.get();
         assertEquals("xyz999", found.getTweetID().value());
-        assertEquals("user-123", found.getAuthorID().value());
+        assertEquals("user-123", found.getAuthorID());
         assertEquals("Mensaje de prueba", found.getMessage());
         assertNotNull(found.getCreatedAt());
     }

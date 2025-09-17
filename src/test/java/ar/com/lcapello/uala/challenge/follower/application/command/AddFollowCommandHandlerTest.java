@@ -3,7 +3,6 @@ package ar.com.lcapello.uala.challenge.follower.application.command;
 import ar.com.lcapello.uala.challenge.follower.domain.exception.InvalidFollowException;
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowCommandRepository;
-import ar.com.lcapello.uala.challenge.user.domain.exception.InvalidUserIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,32 +34,10 @@ public class AddFollowCommandHandlerTest {
         verify(repository).save(captor.capture());
 
         Follow saved = captor.getValue();
-        assertEquals("user-1", saved.getFollowerID().value());
-        assertEquals("user-2", saved.getFollowedID().value());
+        assertEquals("user-1", saved.getFollowerID());
+        assertEquals("user-2", saved.getFollowedID());
         assertNotNull(saved.getCreatedAt());
         assertNotNull(follow.getCreatedAt());
-    }
-
-    @Test
-    void handle_shouldThrowIfFollowerIdInvalid() {
-        AddFollowCommand command = new AddFollowCommand(
-                "", // inválido
-                "user-2"
-        );
-
-        assertThrows(InvalidUserIdException.class, () -> handler.handle(command));
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void handle_shouldThrowIfFollowedIdInvalid() {
-        AddFollowCommand command = new AddFollowCommand(
-                "user-1",
-                "" // inválido
-        );
-
-        assertThrows(InvalidUserIdException.class, () -> handler.handle(command));
-        verify(repository, never()).save(any());
     }
 
     @Test

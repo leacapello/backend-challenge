@@ -1,18 +1,16 @@
 package ar.com.lcapello.uala.challenge.follower.domain.model;
 
 import ar.com.lcapello.uala.challenge.follower.domain.exception.InvalidFollowException;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
-
 import java.time.Instant;
 import java.util.Objects;
 
 public class Follow {
 
-    private final UserID followerID;
-    private final UserID followedID;
+    private final String followerID;
+    private final String followedID;
     private final Instant createdAt;
 
-    public Follow(UserID followerID, UserID followedID, Instant createdAt) {
+    public Follow(String followerID, String followedID, Instant createdAt) {
         if (Objects.equals(followerID, followedID)) {
             throw new InvalidFollowException("A user cannot follow themselves");
         }
@@ -24,11 +22,11 @@ public class Follow {
         this.createdAt = createdAt;
     }
 
-    public UserID getFollowerID() {
+    public String getFollowerID() {
         return followerID;
     }
 
-    public UserID getFollowedID() {
+    public String getFollowedID() {
         return followedID;
     }
 

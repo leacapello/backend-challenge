@@ -2,7 +2,6 @@ package ar.com.lcapello.uala.challenge.follower.application.query;
 
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.follower.domain.repository.FollowQueryRepository;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
@@ -30,8 +29,8 @@ public class GetFollowingHandlerTest {
         String followed = "user456";
         GetFollowingQuery query = new GetFollowingQuery(follower, followed);
 
-        Follow follow = new Follow(new UserID(follower), new UserID(followed), Instant.now());
-        when(repository.find(any(UserID.class), any(UserID.class)))
+        Follow follow = new Follow(follower, followed, Instant.now());
+        when(repository.find(any(String.class), any(String.class)))
                 .thenReturn(Optional.of(follow));
 
         // Act
@@ -49,7 +48,7 @@ public class GetFollowingHandlerTest {
         String followed = "user456";
         GetFollowingQuery query = new GetFollowingQuery(follower, followed);
 
-        when(repository.find(any(UserID.class), any(UserID.class)))
+        when(repository.find(any(String.class), any(String.class)))
                 .thenReturn(Optional.empty());
 
         // Act

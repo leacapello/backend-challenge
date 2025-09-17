@@ -1,7 +1,6 @@
 package ar.com.lcapello.uala.challenge.follower.infrastructure.persistence;
 
 import ar.com.lcapello.uala.challenge.follower.domain.model.Follow;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -19,11 +18,7 @@ public class FollowPanacheRepositoryTest {
     @Test
     public void testSaveFollow() {
         // given
-        Follow follow = new Follow(
-                new UserID("f1"),
-                new UserID("f2"),
-                Instant.now()
-        );
+        Follow follow = new Follow("f1","f2", Instant.now());
 
         // when
         repository.save(follow);
@@ -40,28 +35,24 @@ public class FollowPanacheRepositoryTest {
     @Test
     public void testFindWhenExists() {
         // given
-        Follow follow = new Follow(
-                new UserID("a1"),
-                new UserID("a2"),
-                Instant.now()
-        );
+        Follow follow = new Follow("a1","a2", Instant.now());
         repository.save(follow);
 
         // when
-        Optional<Follow> result = repository.find(new UserID("a1"), new UserID("a2"));
+        Optional<Follow> result = repository.find("a1", "a2");
 
         // then
         assertTrue(result.isPresent());
         Follow found = result.get();
-        assertEquals("a1", found.getFollowerID().value());
-        assertEquals("a2", found.getFollowedID().value());
+        assertEquals("a1", found.getFollowerID());
+        assertEquals("a2", found.getFollowedID());
         assertNotNull(found.getCreatedAt());
     }
 
     @Test
     public void testFindWhenNotExists() {
         // when
-        Optional<Follow> result = repository.find(new UserID("nope"), new UserID("missing"));
+        Optional<Follow> result = repository.find("nope", "missing");
 
         // then
         assertTrue(result.isEmpty());
@@ -70,29 +61,29 @@ public class FollowPanacheRepositoryTest {
     @Test
     public void testFindFollowers() {
         // given
-        repository.save(new Follow(new UserID("x1"), new UserID("target"), Instant.now()));
-        repository.save(new Follow(new UserID("x2"), new UserID("target"), Instant.now()));
-        repository.save(new Follow(new UserID("x3"), new UserID("other"), Instant.now()));
+        repository.save(new Follow("x1", "target", Instant.now()));
+        repository.save(new Follow("x2", "target", Instant.now()));
+        repository.save(new Follow("x3", "other", Instant.now()));
 
         // when
-        List<Follow> followers = repository.findFollowers(new UserID("target"));
+        List<Follow> followers = repository.findFollowers("target");
 
         // then
         assertEquals(2, followers.size());
-        assertTrue(followers.stream().allMatch(f -> f.getFollowedID().value().equals("target")));
+        assertTrue(followers.stream().allMatch(f -> f.getFollowedID().equals("target")));
     }
 
     @Test
     public void testDeleteFollow() {
         // given
-        Follow follow = new Follow(new UserID("d1"), new UserID("d2"), Instant.now());
+        Follow follow = new Follow( "d1", "d2", Instant.now());
         repository.save(follow);
 
         // when
         repository.delete(follow);
 
         // then
-        Optional<Follow> result = repository.find(new UserID("d1"), new UserID("d2"));
+        Optional<Follow> result = repository.find("d1", "d2");
         assertTrue(result.isEmpty());
     }
 }

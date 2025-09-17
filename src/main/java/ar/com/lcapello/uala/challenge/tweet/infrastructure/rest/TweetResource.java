@@ -28,9 +28,9 @@ public class TweetResource {
     @POST
     @Path("/{tweetID}")
     @Transactional
-    public Response get(@PathParam("tweetID") String tweetID,
-                        @HeaderParam("X-User-Id") String userId,
-                        final CreateTweetRequest createTweetRequest) {
+    public Response create(@PathParam("tweetID") String tweetID,
+                           @HeaderParam("X-User-Id") String userId,
+                           final CreateTweetRequest createTweetRequest) {
 
         final CreateTweetCommand request = new CreateTweetCommand(
                 tweetID, userId, createTweetRequest.message()
@@ -40,7 +40,7 @@ public class TweetResource {
 
         final TweetResponse tweetResponse = new TweetResponse(
                 tweet.getTweetID().value(),
-                tweet.getAuthorID().value(),
+                tweet.getAuthorID(),
                 tweet.getMessage(),
                 tweet.getCreatedAt()
         );
@@ -52,8 +52,8 @@ public class TweetResource {
 
     @GET
     @Path("/{tweetID}")
-    public Response get(@PathParam("tweetID") String tweetID,
-                        @HeaderParam("X-User-Id") String userId) {
+    public Response create(@PathParam("tweetID") String tweetID,
+                           @HeaderParam("X-User-Id") String userId) {
 
         final GetTweetByIdQuery query = new GetTweetByIdQuery(tweetID);
 
@@ -61,7 +61,7 @@ public class TweetResource {
 
         final TweetResponse tweetResponse = new TweetResponse(
                 tweet.getTweetID().value(),
-                tweet.getAuthorID().value(),
+                tweet.getAuthorID(),
                 tweet.getMessage(),
                 tweet.getCreatedAt()
         );

@@ -4,8 +4,7 @@ import ar.com.lcapello.uala.challenge.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetCommandRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.repository.TweetQueryRepository;
 import ar.com.lcapello.uala.challenge.tweet.domain.vo.TweetID;
-import ar.com.lcapello.uala.challenge.user.domain.vo.UserID;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import ar.com.lcapello.uala.challenge.tweet.infrastructure.exception.TweetDBException;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -18,12 +17,16 @@ public class TweetPanacheRepository implements PanacheRepositoryBase<TweetEntity
     @Override
     @Transactional
     public void save(final Tweet tweet) {
-        final TweetEntity entity = new TweetEntity();
-        entity.setTweetID(tweet.getTweetID().value());
-        entity.setAuthorID(tweet.getAuthorID().value());
-        entity.setMessage(tweet.getMessage());
-        entity.setCreatedAt(tweet.getCreatedAt());
-        persist(entity);
+        try {
+            final TweetEntity entity = new TweetEntity();
+            entity.setTweetID(tweet.getTweetID().value());
+            entity.setAuthorID(tweet.getAuthorID());
+            entity.setMessage(tweet.getMessage());
+            entity.setCreatedAt(tweet.getCreatedAt());
+            persist(entity);
+        } catch (RuntimeException runtimeException) {
+            throw new TweetDBException("error to insert Tweet [TweetID=" + tweet.getTweetID().value() + "]", runtimeException);
+        }
     }
 
     @Override
@@ -31,7 +34,7 @@ public class TweetPanacheRepository implements PanacheRepositoryBase<TweetEntity
         return findByIdOptional(tweetID.value())
                 .map(entity -> new Tweet(
                         new TweetID(entity.getTweetID()),
-                        new UserID(entity.getAuthorID()),
+                        entity.getAuthorID(),
                         entity.getMessage(),
                         entity.getCreatedAt()
                 ));
