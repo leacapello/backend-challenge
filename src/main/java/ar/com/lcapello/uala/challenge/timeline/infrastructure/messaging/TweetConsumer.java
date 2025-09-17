@@ -13,7 +13,7 @@ public class TweetConsumer {
     @Inject
     private ProcessTweetCommandHandler processCommandHandler;
 
-    @Incoming("tweets-topic")
+    @Incoming("tweets-consumer")
     @Transactional
     public void onMessage(final CreateTweetEvent tweetEvent) {
         processCommandHandler.handle(tweetEvent);

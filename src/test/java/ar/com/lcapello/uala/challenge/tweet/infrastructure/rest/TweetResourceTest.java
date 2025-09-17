@@ -1,6 +1,8 @@
 package ar.com.lcapello.uala.challenge.tweet.infrastructure.rest;
 
 import ar.com.lcapello.uala.challenge.tweet.application.command.CreateTweetCommandHandler;
+import ar.com.lcapello.uala.challenge.tweet.infrastructure.lifecycle.KafkaTestLifecycleManagerOut;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
@@ -11,13 +13,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTest
+@QuarkusTestResource(KafkaTestLifecycleManagerOut.class)
 public class TweetResourceTest {
 
     @Inject
     CreateTweetCommandHandler createTweetCommandHandler;
 
     @Test
-    void shouldCreateTweetAndReturnResponse() {
+    void shouldGetTweetAndReturnResponse() {
         final UUID tweetID = UUID.randomUUID();
 
         given()
