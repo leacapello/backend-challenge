@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: local_postgres
+    environment:
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_user
+      POSTGRES_DB: db_challenge
+    ports:
+      - "5432:5432"
+
+  redpanda:
+    image: redpandadata/redpanda:latest
+    container_name: local_redpanda
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 512M
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --set redpanda.enable_transactions=true
+      - --set redpanda.enable_idempotence=true
+      - --kafka-addr PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://localhost:9092
+      - --rpc-addr 0.0.0.0:33145
+      - --advertise-rpc-addr localhost:33145
+    ports:
+      - "9092:9092"
+      - "9644:9644"
