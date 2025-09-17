@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import ar.com.lcapello.uala.challenge.tweet.infrastructure.rest.dto.TweetResponse;
-import io.quarkus.security.identity.SecurityIdentity;
 import java.net.URI;
 
 @Path("/tweets")
@@ -26,17 +25,12 @@ public class TweetResource {
     @Inject
     private GetTweetByIdHandler getTweetByIdHandler;
 
-    @Inject
-    SecurityIdentity identity;
-
     @POST
     @Path("/{tweetID}")
     @Transactional
     public Response get(@PathParam("tweetID") String tweetID,
                         @HeaderParam("X-User-Id") String userId,
                         final CreateTweetRequest createTweetRequest) {
-
-        //identity.getPrincipal().
 
         final CreateTweetCommand request = new CreateTweetCommand(
                 tweetID, userId, createTweetRequest.message()
