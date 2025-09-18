@@ -1,9 +1,0 @@
-### Crear tweet
-POST {{BASE_URL}}/tweets/1
-X-User-Id: user1
-Content-Type: application/json
-Accept: application/json
-
-{
-  "message": "Hola mundo"
-}
