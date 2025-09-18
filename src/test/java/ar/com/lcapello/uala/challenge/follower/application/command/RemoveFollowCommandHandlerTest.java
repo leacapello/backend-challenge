@@ -52,3 +52,4 @@ public class RemoveFollowCommandHandlerTest {
         verify(repository, never()).delete(any());
     }
 }
+

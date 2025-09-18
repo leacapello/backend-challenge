@@ -53,3 +53,4 @@ public class AddFollowCommandHandlerTest {
         verify(repository, never()).save(any());
     }
 }
+

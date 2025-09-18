@@ -10,10 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
 
 @QuarkusTest
-@Disabled("Ignorando temporalmente")
 public class TimelinePanacheRepositoryTest {
 
     @Inject
@@ -41,25 +39,25 @@ public class TimelinePanacheRepositoryTest {
         // y otro de otro follower (no debería aparecer en el resultado)
         persistTimeline("tX", "author-X", "other-user", "msgX", Instant.now());
 
-        // when: pedimos solo los 2 primeros (pageSize=2) de la página 0
-        List<Timeline> resultPage0 = repository.findByFollower(follower, 0, 2);
-
-        // then: debe devolver los más nuevos primero (t3, t2)
-        assertEquals(2, resultPage0.size());
-        assertEquals("t3", resultPage0.get(0).getTweetId());
-        assertEquals("t2", resultPage0.get(1).getTweetId());
-
-        // when: pedimos página 1 (el tercero)
+        // when: pedimos solo los 2 primeros (pageSize=2) de la página 1
         List<Timeline> resultPage1 = repository.findByFollower(follower, 1, 2);
 
+        // then: debe devolver los más nuevos primero (t3, t2)
+        assertEquals(2, resultPage1.size());
+        assertEquals("t3", resultPage1.get(0).getTweetId());
+        assertEquals("t2", resultPage1.get(1).getTweetId());
+
+        // when: pedimos página 2 (el tercero)
+        List<Timeline> resultPage2 = repository.findByFollower(follower, 2, 2);
+
         // then: solo queda el t1
-        assertEquals(1, resultPage1.size());
-        assertEquals("t1", resultPage1.get(0).getTweetId());
+        assertEquals(1, resultPage2.size());
+        assertEquals("t1", resultPage2.get(0).getTweetId());
     }
 
     @Test
     public void testFindByFollowerReturnsEmptyWhenNoMatches() {
-        List<Timeline> result = repository.findByFollower("no-existe", 0, 10);
+        List<Timeline> result = repository.findByFollower("no-existe", 1, 10);
         assertTrue(result.isEmpty());
     }
 
@@ -75,7 +73,7 @@ public class TimelinePanacheRepositoryTest {
 
         repository.saveAll(timelines);
 
-        List<Timeline> result = repository.findByFollower(follower, 0, 10);
+        List<Timeline> result = repository.findByFollower(follower, 1, 10);
 
         assertEquals(3, result.size());
         assertTrue(result.stream().anyMatch(t -> t.getTweetId().equals("bt1")));
