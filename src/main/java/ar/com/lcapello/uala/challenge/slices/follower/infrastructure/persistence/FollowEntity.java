@@ -8,7 +8,10 @@ import java.util.Objects;
 
 @Entity
 @IdClass(FollowEntity.FollowId.class)
-@Table(name = "Followers")
+@Table(name = "Followers", indexes = {
+    @Index(name = "idx_follow_followed", columnList = "followedID"),
+    @Index(name = "idx_follow_follower", columnList = "followerID")
+})
 public class FollowEntity {
 
     @Id

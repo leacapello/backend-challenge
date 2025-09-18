@@ -8,7 +8,10 @@ import java.util.Objects;
 
 @Entity
 @IdClass(TimelineEntity.TimelineId.class)
-@Table(name = "Timeline")
+@Table(name = "Timeline", indexes = {
+    @Index(name = "idx_timeline_follower_created", columnList = "followerId, createdAt DESC"),
+    @Index(name = "idx_timeline_author", columnList = "authorId")
+})
 public class TimelineEntity {
 
     @Id

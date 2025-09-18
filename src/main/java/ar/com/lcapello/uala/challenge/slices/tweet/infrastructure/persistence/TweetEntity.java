@@ -1,14 +1,17 @@
 package ar.com.lcapello.uala.challenge.slices.tweet.infrastructure.persistence;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "Tweets")
+@Table(name = "Tweets", indexes = {
+    @Index(name = "idx_tweet_author", columnList = "authorID"),
+    @Index(name = "idx_tweet_created", columnList = "createdAt")
+})
 public class TweetEntity {
 
     @Id
