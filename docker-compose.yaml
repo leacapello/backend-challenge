@@ -29,3 +29,10 @@ services:
     ports:
       - "9092:9092"
       - "9644:9644"
+
+  redis:
+    image: redis:7-alpine
+    container_name: local_redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
