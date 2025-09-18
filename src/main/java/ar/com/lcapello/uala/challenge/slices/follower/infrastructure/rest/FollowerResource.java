@@ -4,8 +4,6 @@ import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFol
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommandHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.RemoveFollowCommand;
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.RemoveFollowCommandHandler;
-import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersHandler;
-import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersQuery;
 import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingQuery;
 import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
@@ -17,9 +15,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.net.URI;
-import java.util.List;
 
 @Path("/followers")
 public class FollowerResource {
@@ -29,9 +25,6 @@ public class FollowerResource {
 
     @Inject
     RemoveFollowCommandHandler removeFollowCommandHandler;
-
-    @Inject
-    GetFollowersHandler getFollowersHandler;
 
     @Inject
     GetFollowingHandler getFollowingHandler;
@@ -75,14 +68,6 @@ public class FollowerResource {
         return Response.ok(result).build();
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFollowers(@HeaderParam("X-User-Id") String followerID) {
-
-        List<FollowerResponse> result = getFollowersData(followerID);
-        return Response.ok(result).build();
-    }
-
     @CacheResult(cacheName = "get-followed-cache")
     public FollowerResponse getFollowedData(String followerID, String followedID) {
         Follow follow = getFollowingHandler.handle(new GetFollowingQuery(followerID, followedID))
@@ -93,18 +78,6 @@ public class FollowerResource {
                 follow.getFollowedID(),
                 follow.getCreatedAt()
         );
-    }
-
-    @CacheResult(cacheName = "get-followers-cache")
-    public List<FollowerResponse> getFollowersData(String followerID) {
-        return getFollowersHandler.handle(new GetFollowersQuery(followerID))
-                .stream()
-                .map(f -> new FollowerResponse(
-                        f.getFollowerID(),
-                        f.getFollowedID(),
-                        f.getCreatedAt()
-                ))
-                .toList();
     }
 
 }

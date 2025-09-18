@@ -3,7 +3,7 @@ package ar.com.lcapello.uala.challenge.slices.follower.infrastructure.persistenc
 import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.slices.follower.domain.repository.FollowCommandRepository;
 import ar.com.lcapello.uala.challenge.slices.follower.domain.repository.FollowQueryRepository;
-import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowerReader;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowersReader;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
-public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEntity, FollowEntity.FollowId>, FollowCommandRepository, FollowQueryRepository, FollowerReader {
+public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEntity, FollowEntity.FollowId>, FollowCommandRepository, FollowQueryRepository, FollowersReader {
 
     @Override
     @Transactional
-    public void save(Follow follow) {
+    public void save(final Follow follow) {
         final FollowEntity entity = new FollowEntity();
         entity.setFollowerID(follow.getFollowerID());
         entity.setFollowedID(follow.getFollowedID());
@@ -38,24 +38,11 @@ public class FollowPanacheRepository implements PanacheRepositoryBase<FollowEnti
     }
 
     @Override
-    public List<Follow> findFollowers(String followedId) {
-        return find("SELECT f FROM FollowEntity f WHERE f.followedID = :followedId",
-                Parameters.with("followedId", followedId))
-                .stream()
-                .map(entity -> new Follow(
-                        entity.getFollowerID(),
-                        entity.getFollowedID(),
-                        entity.getCreatedAt()
-                ))
-                .toList();
-    }
-
-    @Override
     public List<String> findFollowersOf(String followedID) {
-        return find("select f.followerID from FollowEntity f where f.followedID = ?1", followedID)
-                .stream()
-                .map(String::valueOf)
-                .toList();
+        return find("SELECT f.followerID FROM FollowEntity f WHERE f.followedID = :followedId",
+                Parameters.with("followedId", followedID))
+                .project(String.class)
+                .list();
     }
 
 }

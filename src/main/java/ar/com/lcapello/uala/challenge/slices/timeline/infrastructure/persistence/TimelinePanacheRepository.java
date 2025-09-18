@@ -5,6 +5,7 @@ import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.Timeline
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.TimelineQueryRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -14,8 +15,11 @@ public class TimelinePanacheRepository implements PanacheRepositoryBase<Timeline
 
     @Override
     public List<Timeline> findByFollower(String followerId, Integer page, Integer pageSize) {
-        return find("followerId = ?1 order by createdAt desc", followerId)
-                .page(Page.of(page, pageSize))
+        final int safePage = (page > 0) ? page - 1 : 0;   //panache empieza con 0 la pagina
+
+        return find("SELECT f FROM TimelineEntity f WHERE f.followerId = :followerId order by f.createdAt desc",
+                Parameters.with("followerId", followerId))
+                .page(Page.of(safePage, pageSize))
                 .list()
                 .stream()
                 .map(entity -> new Timeline(

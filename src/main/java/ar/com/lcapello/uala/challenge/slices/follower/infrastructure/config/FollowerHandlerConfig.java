@@ -2,7 +2,6 @@ package ar.com.lcapello.uala.challenge.slices.follower.infrastructure.config;
 
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommandHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.RemoveFollowCommandHandler;
-import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.infrastructure.persistence.FollowPanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +20,6 @@ public class FollowerHandlerConfig {
     @ApplicationScoped
     public RemoveFollowCommandHandler removeFollowCommandHandler(FollowPanacheRepository repository) {
         return new RemoveFollowCommandHandler(repository);
-    }
-
-    @Produces
-    @ApplicationScoped
-    public GetFollowersHandler getFollowersHandler(FollowPanacheRepository repository) {
-        return new GetFollowersHandler(repository);
     }
 
     @Produces

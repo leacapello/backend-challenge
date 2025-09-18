@@ -1,0 +1,88 @@
+### Limpiar follows previo 1
+DELETE {{BASE_URL}}/followers/userB
+X-User-Id: {{USER_ID}}
+Accept: application/json
+
+### Limpiar follows previo 2
+DELETE {{BASE_URL}}/followers/userC
+X-User-Id: {{USER_ID}}
+Accept: application/json
+
+### Crear follows 1
+POST {{BASE_URL}}/followers/userB
+X-User-Id: {{USER_ID}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+    client.test("seguir userB", function() {
+        client.assert(response.status === 201);
+    });
+%}
+
+### Crear follows 2
+POST {{BASE_URL}}/followers/userC
+X-User-Id: {{USER_ID}}
+Content-Type: application/json
+Accept: application/json
+
+> {%
+    client.test("seguir userC", function() {
+        client.assert(response.status === 201);
+    });
+%}
+
+### Crear tweets para usuarios seguidos
+POST {{BASE_URL}}/tweets/tweetB1
+X-User-Id: userB
+Content-Type: application/json
+Accept: application/json
+
+{
+  "message": "Hola, soy userB y este es mi primer tweet"
+}
+
+> {%
+    client.test("crear tweet de userB", function() {
+        client.assert(response.status === 201);
+    });
+%}
+
+###
+POST {{BASE_URL}}/tweets/tweetC1
+X-User-Id: userC
+Content-Type: application/json
+Accept: application/json
+
+{
+  "message": "Hola, soy userC y este es mi primer tweet"
+}
+
+> {%
+    client.test("crear tweet de userC", function() {
+        client.assert(response.status === 201);
+    });
+%}
+
+### Obtener timeline de userA
+GET {{BASE_URL}}/timeline?page_size=-1&page=1
+X-User-Id: {{USER_ID}}
+Accept: application/json
+
+> {%
+    client.test("obtener timeline de userA", function() {
+        client.assert(response.status === 200);
+        const body = JSON.parse(response.body);
+        client.assert(Array.isArray(body), "El body debe ser un array");
+        client.assert(body.length >= 2, "Debe tener tweets de userB y userC");
+        const authors = body.map(t => t.authorId);
+        client.assert(authors.includes("userB"), "Debe contener tweet de userB");
+        client.assert(authors.includes("userC"), "Debe contener tweet de userC");
+
+        for (let i = 1; i < body.length; i++) {
+            const prev = new Date(body[i - 1].createdAt).getTime();
+            const curr = new Date(body[i].createdAt).getTime();
+            client.assert(prev >= curr, "El timeline debe estar ordenado por createdAt descendente");
+        }
+    });
+%}

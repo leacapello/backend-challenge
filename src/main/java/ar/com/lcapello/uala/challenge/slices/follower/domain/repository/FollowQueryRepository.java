@@ -6,5 +6,4 @@ import java.util.Optional;
 
 public interface FollowQueryRepository {
     Optional<Follow> find(String followerID, String followedID);
-    List<Follow> findFollowers(String userID);
 }

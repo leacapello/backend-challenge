@@ -1,24 +1,24 @@
 package ar.com.lcapello.uala.challenge.slices.timeline.application.command;
 
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
-import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowerReader;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowersReader;
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.TimelineCommandRepository;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessTweetCommandHandler {
 
-    private final FollowerReader followerReader;
+    private final FollowersReader followersReader;
     private final TimelineCommandRepository repository;
 
-    public ProcessTweetCommandHandler(FollowerReader followerReader,
+    public ProcessTweetCommandHandler(FollowersReader followersReader,
                                       TimelineCommandRepository repository) {
-        this.followerReader = followerReader;
+        this.followersReader = followersReader;
         this.repository = repository;
     }
 
-    public void handle(CreateTweetEvent event) {
-        final List<String> followerIds = followerReader.findFollowersOf(event.authorId());
+    public void handle(ProcessTweetCommand event) {
+        final List<String> followerIds = followersReader.findFollowersOf(event.authorId());
 
         final List<Timeline> entries = new ArrayList<>(followerIds.size());
 

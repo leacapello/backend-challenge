@@ -1,9 +1,9 @@
 package ar.com.lcapello.uala.challenge.timeline.application.command;
 
-import ar.com.lcapello.uala.challenge.slices.timeline.application.command.CreateTweetEvent;
+import ar.com.lcapello.uala.challenge.slices.timeline.application.command.ProcessTweetCommand;
 import ar.com.lcapello.uala.challenge.slices.timeline.application.command.ProcessTweetCommandHandler;
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
-import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowerReader;
+import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.FollowersReader;
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.repository.TimelineCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,27 +17,27 @@ import static org.mockito.Mockito.*;
 
 public class ProcessTweetCommandHandlerTest {
 
-    private FollowerReader followerReader;
+    private FollowersReader followersReader;
     private TimelineCommandRepository repository;
     private ProcessTweetCommandHandler handler;
 
     @BeforeEach
     void setUp() {
-        followerReader = mock(FollowerReader.class);
+        followersReader = mock(FollowersReader.class);
         repository = mock(TimelineCommandRepository.class);
-        handler = new ProcessTweetCommandHandler(followerReader, repository);
+        handler = new ProcessTweetCommandHandler(followersReader, repository);
     }
 
     @Test
     void handle_shouldCreateTimelineEntriesForEachFollower() {
-        CreateTweetEvent event = new CreateTweetEvent(
+        ProcessTweetCommand event = new ProcessTweetCommand(
                 "tweet-123",
                 "author-1",
                 "hola mundo",
                 Instant.now()
         );
 
-        when(followerReader.findFollowersOf("author-1"))
+        when(followersReader.findFollowersOf("author-1"))
                 .thenReturn(List.of("user-1", "user-2"));
 
         handler.handle(event);
@@ -60,14 +60,14 @@ public class ProcessTweetCommandHandlerTest {
 
     @Test
     void handle_shouldWorkWithNoFollowers() {
-        CreateTweetEvent event = new CreateTweetEvent(
+        ProcessTweetCommand event = new ProcessTweetCommand(
                 "tweet-456",
                 "author-2",
                 "sin seguidores",
                 Instant.now()
         );
 
-        when(followerReader.findFollowersOf("author-2"))
+        when(followersReader.findFollowersOf("author-2"))
                 .thenReturn(List.of());
 
         handler.handle(event);

@@ -2,7 +2,6 @@ package ar.com.lcapello.uala.challenge.follower.infrastructure.rest;
 
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.AddFollowCommandHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.command.RemoveFollowCommandHandler;
-import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowersHandler;
 import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingHandler;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -19,8 +18,6 @@ public class FollowerResourceTest {
     private AddFollowCommandHandler addFollowCommandHandler;
     @Inject
     private RemoveFollowCommandHandler removeFollowCommandHandler;
-    @Inject
-    private GetFollowersHandler getFollowersHandler;
     @Inject
     private GetFollowingHandler getFollowingHandler;
 
@@ -59,25 +56,6 @@ public class FollowerResourceTest {
                 .body("followerId", equalTo("user111"))
                 .body("followedId", equalTo("user222"))
                 .body("createdAt", notNullValue());
-    }
-
-    @Test
-    void shouldReturnListOfFollowers() {
-        // creo dos usuarios que siguen a "me"
-        given().header("X-User-Id", "f1").when().post("/followers/me").then().statusCode(anyOf(is(201), is(200)));
-        given().header("X-User-Id", "f2").when().post("/followers/me").then().statusCode(anyOf(is(201), is(200)));
-
-        // hago GET de mis followers
-        given()
-                .header("X-User-Id", "me")
-                .when()
-                .get("/followers")
-                .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("$", not(empty()))
-                .body("[0].followerId", notNullValue())
-                .body("[0].followedId", equalTo("me"));
     }
 
     @Test

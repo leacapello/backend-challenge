@@ -61,21 +61,6 @@ public class FollowPanacheRepositoryTest {
     }
 
     @Test
-    public void testFindFollowers() {
-        // given
-        repository.save(new Follow("x1", "target", Instant.now()));
-        repository.save(new Follow("x2", "target", Instant.now()));
-        repository.save(new Follow("x3", "other", Instant.now()));
-
-        // when
-        List<Follow> followers = repository.findFollowers("target");
-
-        // then
-        assertEquals(2, followers.size());
-        assertTrue(followers.stream().allMatch(f -> f.getFollowedID().equals("target")));
-    }
-
-    @Test
     public void testDeleteFollow() {
         // given
         Follow follow = new Follow( "d1", "d2", Instant.now());

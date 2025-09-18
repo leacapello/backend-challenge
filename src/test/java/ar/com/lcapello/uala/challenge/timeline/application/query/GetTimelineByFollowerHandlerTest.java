@@ -1,7 +1,5 @@
 package ar.com.lcapello.uala.challenge.timeline.application.query;
 
-import ar.com.lcapello.uala.challenge.slices.timeline.application.config.TimelineQueryConfig;
-import ar.com.lcapello.uala.challenge.slices.timeline.application.exception.InvalidPageSizeException;
 import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerHandler;
 import ar.com.lcapello.uala.challenge.slices.timeline.application.query.GetTimelineByFollowerQuery;
 import ar.com.lcapello.uala.challenge.slices.timeline.domain.model.Timeline;
@@ -15,21 +13,18 @@ import static org.mockito.Mockito.*;
 public class GetTimelineByFollowerHandlerTest {
 
     private TimelineQueryRepository repository;
-    private TimelineQueryConfig config;
     private GetTimelineByFollowerHandler handler;
 
     @BeforeEach
     void setUp() {
         repository = mock(TimelineQueryRepository.class);
-        config = mock(TimelineQueryConfig.class);
-        handler = new GetTimelineByFollowerHandler(repository, config);
+        handler = new GetTimelineByFollowerHandler(repository);
     }
 
     @Test
     void handle_shouldReturnTimelineList() {
         GetTimelineByFollowerQuery query = new GetTimelineByFollowerQuery("user-123", 0, 10);
 
-        when(config.maxPageSize()).thenReturn(50);
         List<Timeline> expected = List.of(mock(Timeline.class), mock(Timeline.class));
         when(repository.findByFollower("user-123", 0, 10)).thenReturn(expected);
 
@@ -37,21 +32,6 @@ public class GetTimelineByFollowerHandlerTest {
 
         assertEquals(2, result.size());
         verify(repository).findByFollower("user-123", 0, 10);
-    }
-
-    @Test
-    void handle_shouldThrowWhenPageSizeExceedsMax() {
-        GetTimelineByFollowerQuery query = new GetTimelineByFollowerQuery("user-123", 0, 100);
-
-        when(config.maxPageSize()).thenReturn(50);
-
-        InvalidPageSizeException ex = assertThrows(
-                InvalidPageSizeException.class,
-                () -> handler.handle(query)
-        );
-
-        assertTrue(ex.getMessage().contains("less than or equal to 50"));
-        verify(repository, never()).findByFollower(any(), anyInt(), anyInt());
     }
 
 }

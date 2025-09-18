@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TimelineResource {
+
+    @ConfigProperty(name = "timeline.max-page-size")
+    private int maxPageSize;
 
     @Inject
     GetTimelineByFollowerHandler getTimelineHandler;
@@ -24,7 +28,15 @@ public class TimelineResource {
                            @QueryParam("page_size") Integer pageSize,
                            @QueryParam("page") Integer page) {
 
-        final GetTimelineByFollowerQuery query = new GetTimelineByFollowerQuery(userId, pageSize, page);
+        if (page == null || page < 1) {
+            throw new BadRequestException("Parameter 'page' is required and must be greater than or equal to 1.");
+        }
+
+        if (pageSize == null || pageSize < 1 || pageSize > maxPageSize) {
+            throw new BadRequestException("Parameter 'page_size' is required and must be between 1 and " + maxPageSize);
+        }
+
+        final GetTimelineByFollowerQuery query = new GetTimelineByFollowerQuery(userId, page, pageSize);
 
         final List<Timeline> timelines = getTimelineHandler.handle(query);
 
