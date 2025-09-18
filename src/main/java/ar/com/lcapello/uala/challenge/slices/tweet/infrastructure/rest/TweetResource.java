@@ -6,6 +6,7 @@ import ar.com.lcapello.uala.challenge.slices.tweet.application.query.GetTweetByI
 import ar.com.lcapello.uala.challenge.slices.tweet.application.query.GetTweetByIdQuery;
 import ar.com.lcapello.uala.challenge.slices.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.slices.tweet.infrastructure.rest.dto.CreateTweetRequest;
+import io.quarkus.cache.CacheResult;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
@@ -53,6 +54,7 @@ public class TweetResource {
 
     @GET
     @Path("/{tweetID}")
+    @CacheResult(cacheName = "get-tweet-cache")
     public Response create(@PathParam("tweetID") String tweetID,
                            @HeaderParam("X-User-Id") String userId) {
 

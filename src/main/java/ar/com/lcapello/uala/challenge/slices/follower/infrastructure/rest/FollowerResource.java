@@ -10,6 +10,7 @@ import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollo
 import ar.com.lcapello.uala.challenge.slices.follower.application.query.GetFollowingQuery;
 import ar.com.lcapello.uala.challenge.slices.follower.domain.model.Follow;
 import ar.com.lcapello.uala.challenge.slices.follower.infrastructure.rest.dto.FollowerResponse;
+import io.quarkus.cache.CacheResult;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -65,6 +66,7 @@ public class FollowerResource {
     @GET
     @Path("/{followedID}")
     @Produces(MediaType.APPLICATION_JSON)
+    @CacheResult(cacheName = "get-followed-cache")
     public Response getFollowed(@HeaderParam("X-User-Id") String followerID,
                                 @PathParam("followedID") String followedID) {
         final Follow follow = getFollowingHandler.handle(new GetFollowingQuery(followerID, followedID))
@@ -81,6 +83,7 @@ public class FollowerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @CacheResult(cacheName = "get-followers-cache")
     public Response getFollowers(@HeaderParam("X-User-Id") String followerID) {
         final List<Follow> followers = getFollowersHandler.handle(new GetFollowersQuery(followerID));
         final List<FollowerResponse> result = followers.stream()
