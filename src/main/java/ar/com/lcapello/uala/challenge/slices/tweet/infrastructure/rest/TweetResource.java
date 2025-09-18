@@ -7,6 +7,7 @@ import ar.com.lcapello.uala.challenge.slices.tweet.application.query.GetTweetByI
 import ar.com.lcapello.uala.challenge.slices.tweet.domain.model.Tweet;
 import ar.com.lcapello.uala.challenge.slices.tweet.infrastructure.rest.dto.CreateTweetRequest;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.MediaType;
@@ -57,7 +58,7 @@ public class TweetResource {
 
         final GetTweetByIdQuery query = new GetTweetByIdQuery(tweetID);
 
-        final Tweet tweet = getTweetByIdHandler.handle(query).orElseThrow(() -> new NotFoundException("Tweet not found"));
+        final Tweet tweet = getTweetByIdHandler.handle(query).orElseThrow(() -> new EntityNotFoundException("Tweet not found"));
 
         final TweetResponse tweetResponse = new TweetResponse(
                 tweet.getTweetID().value(),

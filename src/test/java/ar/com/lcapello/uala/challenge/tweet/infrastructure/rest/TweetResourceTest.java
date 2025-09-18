@@ -60,7 +60,7 @@ public class TweetResourceTest {
             .contentType(ContentType.JSON)
             .body("{\"message\": \"hola mundo\"}")
         .when()
-            .post("/tweets/ ")
+            .post("/tweets/")
         .then()
             .statusCode(404);
     }

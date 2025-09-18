@@ -1,31 +1,27 @@
 package ar.com.lcapello.uala.challenge.platform.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import org.jboss.logging.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-import jakarta.ws.rs.NotFoundException;
 import java.util.Map;
 
 @Provider
-public class GlobalExceptionMapper {
-
-    private static final Logger LOG = Logger.getLogger(GlobalExceptionMapper.class);
+public class DBExceptionMapper {
 
     @ServerExceptionMapper
-    public Response handleException(Exception ex) {
-        LOG.error("Unhandled exception", ex);
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+    public Response handleConstraintViolationException(ConstraintViolationException ex) {
+        return Response.status(Response.Status.CONFLICT)
                 .entity(Map.of(
-                        "error", "internal_error",
+                        "error", "conflict",
                         "message", ex.getMessage()
                 ))
                 .build();
     }
 
     @ServerExceptionMapper
-    public Response handleNotFoundException(NotFoundException ex) {
-        LOG.error("not found exception", ex);
+    public Response handleEntityNotFoundException(EntityNotFoundException ex) {
         return Response.status(Response.Status.NOT_FOUND)
                 .entity(Map.of(
                         "error", "not_found",
