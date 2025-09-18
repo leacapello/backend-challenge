@@ -1,0 +1,37 @@
+## Assumptions
+
+- **Identificación de usuario**:
+  Actualmente se usa el header `X-User-Id` para simplificar.
+  En un entorno productivo se podría usar autenticación basada en JWT emitidos por un proveedor de identidad (Auth0, Keycloak, etc.),
+  validando la firma, la expiración y los claims para identificar de forma segura al usuario.
+
+- **Tweets**:
+  - Solo se permite crear y obtener tweets.
+  - No se permite editar ni eliminar tweets.
+
+- **Follows**:
+  - Se permite seguir y dejar de seguir a otros usuarios.
+  - Se permite obtener la lista de seguidores de un usuario.
+  - La relación de follow es unidireccional (si A sigue a B, no implica que B siga a A).
+
+- **Timeline**:
+  - Se permite obtener solo el timeline de un usuario autenticado.
+  - El timeline se construye a partir de eventos de nuevos tweets.
+  - Si un usuario deja o comienza a seguir a otro usuario, esto no actualiza retroactivamente el timeline existente para reducir complejidad.
+    Eventualmente, el usuario comenzará o dejará de ver tweets nuevos de ese usuario seguido/dejado de seguir.
+    Si fuera necesario hacerlo inmediato, se podría aplicar el mismo patrón de eventos que se usa para la creación de tweets.
+  - Se asume que los usuarios no tendrán miles o millones de seguidores. Si existiera ese caso, se debería aplicar el patrón fan-out on read (para esos usuarios) para evitar miles o millones de escrituras.
+  - Se asume que los timelines no necesitan ser eliminados. Si así fuera, se podría implementar un proceso asíncrono que elimine los timelines. Esta tabla, si crece mucho, podría necesitar particiones (ver ADRs).
+
+- **Escalabilidad y rendimiento**:
+  - Se asume que las operaciones de lectura más intensivas serán las de obtención de tweets individuales y de listas de seguidores.
+  - El endpoint de timeline realiza paginación sin caché, asumiendo que un cliente no realizará múltiples requests sobre la misma página del timeline.
+  - Si fuera necesario, se puede aplicar cacheo de lectura para timelines muy consultados.
+
+- **Consistencia**:
+  - Se asume consistencia eventual en la propagación de tweets a timelines (fan-out asincrónico).
+  - No se requieren transacciones distribuidas.
+
+- **Persistencia**:
+  - Las entidades usan identificadores generados por el cliente (UUID) para soportar idempotencia y escalabilidad horizontal.
+  - Las marcas de tiempo (`createdAt`) se generan en el servidor para garantizar consistencia temporal.
