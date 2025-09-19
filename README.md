@@ -64,6 +64,13 @@ Ejecutar todos los tests:
 ./mvnw test
 ```
 
+### Tests de integración
+El archivo [api-test.http](src/test/integration/http/api-tests.http) permite ejecutar llamadas a los endpoints desde el IDE (IntelliJ / VS Code).
+Incluye requests para:
+ - Crear y obtener tweets
+ - Seguir y dejar de seguir usuarios
+ - Obtener el timeline paginado
+
 ## Documentación Adicional
  - [business.txt](business.txt)
  - [ADRs (Architecture Decision Records)](docs/adr)
