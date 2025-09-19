@@ -49,7 +49,7 @@ docker-compose up
 
 ### 4.Ejecutar la aplicación
 ```
-java -Duser.timezone=UTC -jar target/quarkus-app/quarkus-run.jar
+java -D"user.timezone=UTC" -jar target/quarkus-app/quarkus-run.jar
 ```
 
 ## Documentación y Observabilidad
