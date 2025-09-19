@@ -129,7 +129,6 @@ Accept: application/json
     });
 %}
 
-
 ### Crear tweets para usuarios seguidos
 POST {{BASE_URL}}/tweets/tweetB1
 X-User-Id: userB
@@ -146,7 +145,7 @@ Accept: application/json
     });
 %}
 
-###
+### creat tweet
 POST {{BASE_URL}}/tweets/tweetA1
 X-User-Id: userA
 Content-Type: application/json
